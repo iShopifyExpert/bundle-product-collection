@@ -3,59 +3,52 @@
 {% paginate collection.products by 50 %}
   <div id="collection-page">
     {% assign product = all_products[section.settings.product] %}
-<form action="/cart/add" method="post" data-money-format="{{ shop.money_format }}">
-    <div class="collection-description desktop-12 tablet-6 mobile-3">
-      <h1>{{ collection.title }}</h1>
-      <div class="rte">{{ collection.description | remove: "[banner]" }}</div>
-    </div>
-
-    <div class="clear"></div>
-
-    {% unless section.settings.sidebar %}
-    <div id="full-width-filter" class="desktop-12 tablet-6 mobile-3">
-      {% for block in section.blocks %}
-      {% include 'filter' %}
-      {% endfor %}
-    </div>
-    {% endunless %}
-
-    <div class="clear"></div>
-    
-    <div class="product-loop{% if section.settings.sidebar %} desktop-10 tablet-5 mobile-3{% endif %}">
-
-      {% for product in collection.products %}{% if product.handle != 'the-sox-drawer' %}
-      {% assign products-per-row = section.settings.products-per-row %}
-  	  <div class="product-index {% if products-per-row == 4 %}desktop-3{% cycle ' first', '', '', ' last' %}{% elsif products-per-row == 3 %}medium_grid desktop-4{% cycle ' first', '', ' last' %}{% elsif products-per-row == 2 %}large_grid desktop-6{% cycle ' first', ' last' %}{% endif %} tablet-half mobile-half" data-alpha="{{ product.title }}" data-price="{{ product.price }}">
-        {% include 'the-sox-drawer-listing' %}
+    <form action="/cart/add" method="post" data-money-format="{{ shop.money_format }}">
+      <div class="collection-description desktop-12 tablet-6 mobile-3">
+        <h1>{{ collection.title }}</h1>
+        <div class="rte">{{ collection.description | remove: "[banner]" }}</div>
       </div>
-      {% endif %}{% endfor %}
+      <div class="clear"></div>
+      {% unless section.settings.sidebar %}
+      <div id="full-width-filter" class="desktop-12 tablet-6 mobile-3">
+        {% for block in section.blocks %}
+        {% include 'filter' %}
+        {% endfor %}
+      </div>
+      {% endunless %}
+      <div class="clear"></div>
+      <div class="product-loop{% if section.settings.sidebar %} desktop-10 tablet-5 mobile-3{% endif %}">
+        {% for product in collection.products %}{% if product.handle != 'the-sox-drawer' %}
+        {% assign products-per-row = section.settings.products-per-row %}
+        <div class="product-index {% if products-per-row == 4 %}desktop-3{% cycle ' first', '', '', ' last' %}{% elsif products-per-row == 3 %}medium_grid desktop-4{% cycle ' first', '', ' last' %}{% elsif products-per-row == 2 %}large_grid desktop-6{% cycle ' first', ' last' %}{% endif %} tablet-half mobile-half" data-alpha="{{ product.title }}" data-price="{{ product.price }}">
+          {% include 'the-sox-drawer-listing' %}
+        </div>
+        {% endif %}{% endfor %}
+      </div>
       
-    </div>
-
-    {% if section.settings.sidebar %}
-    <div class="desktop-2 tablet-1 mobile-3">
-      <div id="collection-sidebar">
-        <span id="totalqty">Total Qty = 0</span>
-        <div class="select">
-    <select id="product-select-{{ product.id }}" name='id'>
-      {% for variant in product.variants %}
-      <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - <span class="Bold-theme-hook-DO-NOT-DELETE bold_product_price" data-override-value-set="1" data-override-value="{{ variant.price }}" style="display:none !important;"></span>{{ variant.price | money }}</option>
-      {% endfor %}
-    </select>
-  </div>
-        <div class="product-add clearfix">{%comment%}
-    <h5>{{ 'products.product.quantity' | t }}</h5> 
-    
-    <a class="downer" field="quantity"><i class="fa fa-minus"></i></a>
-    <input min="1" type="text" name="quantity" class="quantity" value="1" />
-    <a class="up" field="quantity"><i class="fa fa-plus"></i></a>{%endcomment%}
-    <button type="submit" name="add" class="add clearfix"/>{{ 'products.product.add_to_cart' | t }}</button>
-    
-  </div>
+      {% if section.settings.sidebar %}
+      <div class="desktop-2 tablet-1 mobile-3">
+        <div id="collection-sidebar">
+          <span id="totalqty">Total Qty = 0</span>
+          <div class="select">
+            <select id="product-select-{{ product.id }}" name="id">
+              {% for variant in product.variants %}
+              <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - <span class="Bold-theme-hook-DO-NOT-DELETE bold_product_price" data-override-value-set="1" data-override-value="{{ variant.price }}" style="display:none !important;"></span>{{ variant.price | money }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="product-add clearfix">
+            {%comment%}
+            <h5>{{ 'products.product.quantity' | t }}</h5> 
+            <a class="downer" field="quantity"><i class="fa fa-minus"></i></a>
+            <input min="1" type="text" name="quantity" class="quantity" value="1" />
+            <a class="up" field="quantity"><i class="fa fa-plus"></i></a>{%endcomment%}
+            
+            <button type="submit" name="add" class="add clearfix">{{ 'products.product.add_to_cart' | t }}</button>
+          </div>
+        </div>
       </div>
-    </div>
-    {% include 'collection-sidebar' %}
-    {% endif %}
+      {% endif %}
     </form>
   </div>
   <div class="clear"></div>
